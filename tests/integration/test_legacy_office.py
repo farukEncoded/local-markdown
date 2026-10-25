@@ -6,8 +6,14 @@ import hashlib
 from pathlib import Path
 import pytest
 
+from local_markdown.conversion.legacy_office import find_libreoffice_binary
 from local_markdown.conversion.models import AdapterType, FileStatus
 from local_markdown.conversion.service import convert_document
+
+pytestmark = pytest.mark.skipif(
+    find_libreoffice_binary() is None,
+    reason="LibreOffice runtime not staged in this environment",
+)
 
 FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
 

@@ -32,6 +32,18 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements-build.lock
 
+      - name: Cache Vendor Runtimes
+        id: cache-vendor
+        uses: actions/cache@v4
+        with:
+          path: vendor/
+          key: vendor-runtimes-${{ runner.os }}-${{ hashFiles('vendor/components.lock.json') }}
+
+      - name: Stage Vendor Runtimes
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
+        run: |
+          powershell -ExecutionPolicy Bypass -File scripts\setup-vendor.ps1
+
       - name: Run Automated Tests
         run: |
           $env:PYTHONPATH = "src"

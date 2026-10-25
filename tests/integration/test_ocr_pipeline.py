@@ -7,7 +7,13 @@ from pathlib import Path
 import pytest
 
 from local_markdown.conversion.models import AdapterType, FileStatus
+from local_markdown.conversion.ocr import find_tesseract_binary
 from local_markdown.conversion.service import convert_document
+
+pytestmark = pytest.mark.skipif(
+    find_tesseract_binary() is None,
+    reason="Tesseract OCR runtime not staged in this environment",
+)
 
 FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
 
