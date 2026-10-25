@@ -1,0 +1,27 @@
+{
+  "app_name": "Local Markdown",
+  "app_version": "1.0.0",
+  "build_date": "2026-10-25",
+  "core_formats": [
+    ".docx",
+    ".pdf",
+    ".xlsx",
+    ".xls",
+    ".pptx"
+  ],
+  "full_formats": [
+    ".docx",
+    ".pdf",
+    ".xlsx",
+    ".xls",
+    ".pptx",
+    ".doc",
+    ".ppt",
+    ".png",
+    ".jpg",
+    ".jpeg"
+  ],
+  "ocr_engine": "Tesseract 5.x",
+  "legacy_engine": "LibreOffice Isolated Runtime",
+  "offline_guarantee": true
+}

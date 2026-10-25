@@ -1,0 +1,307 @@
+/* Local Markdown - Premium Slate Dark Design System */
+
+/* Global Window & Root */
+QWidget#mainWindow {
+    background-color: #0b0f19;
+    color: #f8fafc;
+    font-family: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-size: 13px;
+}
+
+QWidget {
+    color: #e2e8f0;
+    font-family: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+/* Card & Container Panels */
+QFrame#cardFrame {
+    background-color: #131b2e;
+    border: 1px solid #1f2c47;
+    border-radius: 12px;
+}
+
+QFrame#commandDeck {
+    background-color: #131b2e;
+    border: 1px solid #1f2c47;
+    border-radius: 10px;
+    padding: 6px;
+}
+
+QFrame#dropzoneCard {
+    background-color: #0e1524;
+    border: 2px dashed #243556;
+    border-radius: 12px;
+}
+
+QFrame#dropzoneCard:hover {
+    border-color: #3b82f6;
+    background-color: #111a2e;
+}
+
+/* Base Buttons */
+QPushButton {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    padding: 8px 16px;
+    font-weight: 500;
+    color: #f1f5f9;
+    font-size: 13px;
+    outline: none;
+}
+
+QPushButton:hover {
+    background-color: #2b3a51;
+    border-color: #475569;
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #162030;
+}
+
+QPushButton:disabled {
+    background-color: #0f1624;
+    border-color: #1c2638;
+    color: #475569;
+}
+
+/* Primary Action Buttons */
+QPushButton#primaryButton {
+    background-color: #2563eb;
+    border: 1px solid #3b82f6;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+QPushButton#primaryButton:hover {
+    background-color: #1d4ed8;
+    border-color: #60a5fa;
+}
+
+QPushButton#primaryButton:pressed {
+    background-color: #1e40af;
+}
+
+/* Convert Button (Emerald Green CTA) */
+QPushButton#convertButton {
+    background-color: #059669;
+    border: 1px solid #10b981;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+QPushButton#convertButton:hover {
+    background-color: #047857;
+    border-color: #34d399;
+}
+
+QPushButton#convertButton:pressed {
+    background-color: #065f46;
+}
+
+QPushButton#convertButton:disabled {
+    background-color: #0f1624;
+    border-color: #1c2638;
+    color: #475569;
+}
+
+/* Stop Button (Red) */
+QPushButton#stopButton {
+    background-color: #dc2626;
+    border: 1px solid #ef4444;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+QPushButton#stopButton:hover {
+    background-color: #b91c1c;
+}
+
+QPushButton#stopButton:disabled {
+    background-color: #0f1624;
+    border-color: #1c2638;
+    color: #475569;
+}
+
+/* Danger / Clear History Button */
+QPushButton#dangerButton {
+    background-color: #1a1523;
+    border: 1px solid #4a2228;
+    color: #f87171;
+    font-weight: 500;
+    padding: 4px 14px;
+    min-width: 115px;
+}
+
+QPushButton#dangerButton:hover {
+    background-color: #3b171e;
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+/* Copy Button */
+QPushButton#copyButton {
+    background-color: #192338;
+    border: 1px solid #2d4268;
+    color: #60a5fa;
+    font-weight: 500;
+}
+
+QPushButton#copyButton:hover {
+    background-color: #2563eb;
+    border-color: #3b82f6;
+    color: #ffffff;
+}
+
+/* Small Card Header Action Buttons */
+QPushButton#cardHeaderBtn {
+    background-color: #1a253a;
+    border: 1px solid #293b5c;
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+}
+
+QPushButton#cardHeaderBtn:hover {
+    background-color: #273754;
+    border-color: #3b82f6;
+    color: #ffffff;
+}
+
+QPushButton#cardHeaderBtn:disabled {
+    background-color: #0f1624;
+    border-color: #192338;
+    color: #475569;
+}
+
+/* VLine Separator */
+QFrame#vLine {
+    background-color: #243556;
+    width: 1px;
+    max-width: 1px;
+}
+
+/* Splitter */
+QSplitter::handle {
+    background-color: #1f2c47;
+    width: 4px;
+    border-radius: 2px;
+}
+
+QSplitter::handle:hover {
+    background-color: #3b82f6;
+}
+
+/* Table View */
+QTableView {
+    background-color: #090d16;
+    border: 1px solid #1c2840;
+    border-radius: 8px;
+    gridline-color: transparent;
+    selection-background-color: #193154;
+    selection-color: #ffffff;
+    outline: none;
+    color: #f1f5f9;
+}
+
+QTableView::item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #121929;
+}
+
+QTableView::item:selected {
+    background-color: #193154;
+    color: #ffffff;
+}
+
+QTableView::item:hover:!selected {
+    background-color: #0f1626;
+}
+
+QHeaderView::section {
+    background-color: #131b2e;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border: none;
+    border-bottom: 1px solid #1f2c47;
+}
+
+/* PlainTextEdit (Markdown Preview Area) */
+QPlainTextEdit#previewEdit {
+    background-color: #080c14;
+    border: 1px solid #1c2840;
+    border-radius: 8px;
+    font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+    font-size: 13px;
+    color: #e2e8f0;
+    padding: 14px;
+    line-height: 1.5;
+    selection-background-color: #2563eb;
+    selection-color: #ffffff;
+}
+
+/* Progress Bar */
+QProgressBar {
+    border: 1px solid #1f2c47;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #0e1524;
+    height: 8px;
+}
+
+QProgressBar::chunk {
+    background-color: #3b82f6;
+    border-radius: 3px;
+}
+
+/* Scrollbars */
+QScrollBar:vertical {
+    border: none;
+    background: #090d16;
+    width: 8px;
+    margin: 0;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: #243556;
+    min-height: 24px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #3b82f6;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background: #090d16;
+    height: 8px;
+    margin: 0;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #243556;
+    min-width: 24px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: #3b82f6;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}

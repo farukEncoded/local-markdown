@@ -1,0 +1,46 @@
+{
+  "name": "Local Markdown Antigravity handoff",
+  "prepared_date": "2026-10-25",
+  "timezone": "Asia/Calcutta",
+  "package_type": "planning_and_implementation_handoff_only",
+  "application_built": false,
+  "application_tests_run": false,
+  "archive_document_root": "docs/handoff/",
+  "files": [
+    {
+      "path": "docs/handoff/00-START-HERE.md",
+      "bytes": 3972,
+      "sha256": "b6b6a7da455a88794428d426d3d9679c9b71253b64cd495e9244ef2f36c0102e"
+    },
+    {
+      "path": "docs/handoff/01-IMPLEMENTATION-PLAN.md",
+      "bytes": 17518,
+      "sha256": "4faf8083ea25c56e10466f239f4d002e355acbc62e3c63839e9ae3b9f7d15c41"
+    },
+    {
+      "path": "docs/handoff/02-ANTIGRAVITY-HANDOFF.md",
+      "bytes": 21454,
+      "sha256": "441dd7c968b765ee86973d7a8c53a06a9c5af4b0bae468f8b50f8ecc5581117c"
+    },
+    {
+      "path": "docs/handoff/03-ANTIGRAVITY-PROMPT.md",
+      "bytes": 4903,
+      "sha256": "de9e77f5fa0968cccc7a6ff94513a66fbc2d3be624bfbba569ac417d036a6b96"
+    },
+    {
+      "path": "docs/handoff/04-ACCEPTANCE-AND-RELEASE-CHECKLIST.md",
+      "bytes": 10189,
+      "sha256": "91c7e172301a5bc788fa251c3012a73eaadf9e54b6d46c0e6ae9ce49c3b28918"
+    },
+    {
+      "path": "docs/handoff/05-REPOSITORY-REVIEW-AND-SOURCES.md",
+      "bytes": 8662,
+      "sha256": "ee3bb1545267d896d6787868ebead7ced0906ad7a40444f66174b7f974a0f57d"
+    },
+    {
+      "path": "docs/handoff/06-CLIENT-QUICKSTART-DRAFT.md",
+      "bytes": 1424,
+      "sha256": "cb22286855485ee6a4b2f7da7296e29dd4f6a51e29489c17ca3c4d7218377639"
+    }
+  ]
+}

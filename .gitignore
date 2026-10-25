@@ -1,0 +1,58 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build and Packaging Outputs
+dist_release/
+dist/
+build/
+test_install/
+*.log
+*.tmp
+*.tmp_*
+
+# Local environments and scratches
+scratch_*/
+vendor_downloads/
+vendor_extracted_lo/
+vendor/libreoffice/
+vendor/tesseract/
+7z_tool/
+7zextra/
+*.msi
+*.exe.log
+
+# App data
+local_markdown.lock
+.local-markdown-owned
+LocalMarkdown/
+
+# OS artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store

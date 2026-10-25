@@ -1,0 +1,27 @@
+{
+  "vendor_components": [
+    {
+      "name": "Tesseract-OCR",
+      "version": "5.5.3",
+      "license": "Apache-2.0",
+      "upstream": "https://github.com/tesseract-ocr/tesseract",
+      "path": "vendor/tesseract",
+      "files": [
+        "tesseract.exe",
+        "tessdata/eng.traineddata"
+      ]
+    },
+    {
+      "name": "LibreOffice Standalone Runtime",
+      "version": "26.8.1.1",
+      "license": "MPL-2.0",
+      "upstream": "https://www.documentfoundation.org/",
+      "path": "vendor/libreoffice",
+      "entrypoints": [
+        "program/soffice.com",
+        "program/soffice.exe",
+        "program/soffice.bin"
+      ]
+    }
+  ]
+}
