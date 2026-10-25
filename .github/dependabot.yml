@@ -1,0 +1,19 @@
+# Dependabot configuration for Local Markdown
+# Automatically monitors PyPI dependencies (specifically Microsoft's markitdown)
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      markitdown:
+        patterns:
+          - "markitdown*"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3

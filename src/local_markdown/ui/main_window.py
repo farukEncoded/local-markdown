@@ -37,6 +37,7 @@ from local_markdown.storage.history import (
 )
 from local_markdown.storage.paths import get_resource_dir
 from local_markdown.ui.file_model import FileTableModel
+from local_markdown.updater import AppUpdater
 from local_markdown.ui.messages import (
     APP_SUBTITLE,
     APP_TITLE,
@@ -63,6 +64,7 @@ class MainWindow(QWidget):
 
         self._controller = ConversionController(self)
         self._model = FileTableModel()
+        self._updater = AppUpdater(self)
 
         # Cached preview tracking
         self._current_selected_file: Optional[QueuedFile] = None
@@ -70,6 +72,9 @@ class MainWindow(QWidget):
 
         self._init_ui()
         self._connect_signals()
+
+        # Check for application updates quietly after startup (silent if already on latest)
+        QTimer.singleShot(2500, lambda: self._updater.check_for_updates(silent_if_current=True))
 
     def _init_ui(self) -> None:
         main_layout = QVBoxLayout(self)
@@ -120,6 +125,13 @@ class MainWindow(QWidget):
         )
         offline_pill.setFixedHeight(28)
         right_header_layout.addWidget(offline_pill)
+
+        self.btn_check_updates = QPushButton("🔄 Updates")
+        self.btn_check_updates.setObjectName("ghostButton")
+        self.btn_check_updates.setFixedHeight(28)
+        self.btn_check_updates.setToolTip("Check GitHub for application updates")
+        self.btn_check_updates.clicked.connect(lambda: self._updater.check_for_updates(silent_if_current=False))
+        right_header_layout.addWidget(self.btn_check_updates)
 
         self.btn_clear_history = QPushButton("🧹 Clear history")
         self.btn_clear_history.setObjectName("dangerButton")

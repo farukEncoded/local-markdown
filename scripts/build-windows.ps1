@@ -30,6 +30,14 @@ if (-not $SkipTests) {
     Write-Host "`n[1/5] Skipping tests as requested." -ForegroundColor Gray
 }
 
+# Ensure vendor offline runtimes are staged
+$loCheck = Join-Path $ProjectRoot "vendor\libreoffice\program\soffice.exe"
+$tessCheck = Join-Path $ProjectRoot "vendor\tesseract\tesseract.exe"
+if (-not (Test-Path $loCheck) -or -not (Test-Path $tessCheck)) {
+    Write-Host "`nStaging vendor runtimes (LibreOffice & Tesseract)..." -ForegroundColor Yellow
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $ProjectRoot "scripts\setup-vendor.ps1")
+}
+
 # 2. PyInstaller Build
 Write-Host "`n[2/5] Freezing application with PyInstaller..." -ForegroundColor Yellow
 & $VenvPyInstaller packaging\LocalMarkdown.spec --clean --noconfirm
@@ -77,8 +85,11 @@ with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
             zf.write(full, rel)
 "@
 
+$hashes = Get-FileHash dist_release\LocalMarkdown-* -Algorithm SHA256
+$hashes | ForEach-Object { "$($_.Hash)  $((Split-Path $_.Path -Leaf))" } | Out-File -Encoding utf8 dist_release\SHA256SUMS.txt
+
 Write-Host "`n==================================================" -ForegroundColor Green
 Write-Host "   Release Artifacts Generated Successfully!       " -ForegroundColor Green
 Write-Host "==================================================" -ForegroundColor Green
-Get-FileHash dist_release\* -Algorithm SHA256 | Select-Object Path, Hash | Format-List
+$hashes | Select-Object Path, Hash | Format-List
 Get-ChildItem dist_release\* | Select-Object Name, Length | Format-Table -AutoSize

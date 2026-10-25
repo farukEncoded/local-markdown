@@ -124,6 +124,21 @@ QPushButton#stopButton:disabled {
     color: #475569;
 }
 
+/* Ghost / Header Action Button */
+QPushButton#ghostButton {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    font-weight: 500;
+    padding: 4px 12px;
+}
+
+QPushButton#ghostButton:hover {
+    background-color: #2b3a51;
+    border-color: #475569;
+    color: #f8fafc;
+}
+
 /* Danger / Clear History Button */
 QPushButton#dangerButton {
     background-color: #1a1523;
