@@ -10,9 +10,11 @@ from local_markdown.conversion.legacy_office import find_libreoffice_binary
 from local_markdown.conversion.models import AdapterType, FileStatus
 from local_markdown.conversion.service import convert_document
 
+import os
+
 pytestmark = pytest.mark.skipif(
-    find_libreoffice_binary() is None,
-    reason="LibreOffice runtime not staged in this environment",
+    find_libreoffice_binary() is None or os.environ.get("GITHUB_ACTIONS") == "true",
+    reason="LibreOffice requires an interactive Windows desktop session (Session 0 isolation blocks GDI in headless CI runners)",
 )
 
 FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
