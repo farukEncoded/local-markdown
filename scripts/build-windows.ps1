@@ -10,19 +10,29 @@ Write-Host "   Local Markdown - Windows Production Build      " -ForegroundColor
 Write-Host "==================================================" -ForegroundColor Cyan
 
 $ProjectRoot = (Get-Location).Path
+
+# 0. Locate Python, PyInstaller, and Pytest (.venv or system PATH in CI)
 $VenvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 $VenvPyInstaller = Join-Path $ProjectRoot ".venv\Scripts\pyinstaller.exe"
 $VenvPytest = Join-Path $ProjectRoot ".venv\Scripts\pytest.exe"
 
-if (-not (Test-Path $VenvPython)) {
-    throw "Virtual environment not found at .venv. Please initialize .venv first."
+if (Test-Path $VenvPython) {
+    $PythonExe = $VenvPython
+    $PyInstallerExe = $VenvPyInstaller
+    $PytestExe = $VenvPytest
+} elseif (Get-Command python -ErrorAction SilentlyContinue) {
+    $PythonExe = (Get-Command python).Source
+    $PyInstallerExe = if (Get-Command pyinstaller -ErrorAction SilentlyContinue) { (Get-Command pyinstaller).Source } else { "pyinstaller" }
+    $PytestExe = if (Get-Command pytest -ErrorAction SilentlyContinue) { (Get-Command pytest).Source } else { "pytest" }
+} else {
+    throw "Python runtime not found in .venv or on system PATH."
 }
 
 # 1. Run Tests
 if (-not $SkipTests) {
     Write-Host "`n[1/5] Running automated tests..." -ForegroundColor Yellow
     $env:PYTHONPATH = "src"
-    & $VenvPytest -v tests/unit tests/integration
+    & $PytestExe -v tests/unit tests/integration
     if ($LASTEXITCODE -ne 0) {
         throw "Unit/Integration tests failed! Aborting build."
     }
@@ -40,7 +50,7 @@ if (-not (Test-Path $loCheck) -or -not (Test-Path $tessCheck)) {
 
 # 2. PyInstaller Build
 Write-Host "`n[2/5] Freezing application with PyInstaller..." -ForegroundColor Yellow
-& $VenvPyInstaller packaging\LocalMarkdown.spec --clean --noconfirm
+& $PyInstallerExe packaging\LocalMarkdown.spec --clean --noconfirm
 if ($LASTEXITCODE -ne 0) {
     throw "PyInstaller build failed!"
 }
@@ -57,6 +67,9 @@ $isccPaths = @(
     "C:\Program Files\Inno Setup 6\ISCC.exe"
 )
 $iscc = $isccPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $iscc -and (Get-Command iscc -ErrorAction SilentlyContinue)) {
+    $iscc = (Get-Command iscc).Source
+}
 if (-not $iscc) {
     throw "Inno Setup Compiler (ISCC.exe) not found!"
 }
@@ -69,7 +82,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 5. Build Portable ZIP and Hashes
 Write-Host "`n[5/5] Building portable ZIP and computing release hashes..." -ForegroundColor Yellow
-& $VenvPython -c @"
+& $PythonExe -c @"
 import zipfile, os
 from pathlib import Path
 
