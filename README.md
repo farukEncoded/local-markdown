@@ -1,10 +1,24 @@
 # Local Markdown
 
-[![Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-blue.svg)](https://github.com/local-markdown/local-markdown)
-[![Offline](https://img.shields.io/badge/Privacy-100%25%20Offline-success.svg)](https://github.com/local-markdown/local-markdown)
+[![Latest Release](https://img.shields.io/github/v/release/farukEncoded/local-markdown?color=blue&label=Latest%20Release)](https://github.com/farukEncoded/local-markdown/releases/latest)
+[![Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-blue.svg)](https://github.com/farukEncoded/local-markdown)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline-success.svg)](https://github.com/farukEncoded/local-markdown)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Local Markdown** is a standalone, offline Windows desktop application designed to convert everyday office documents, spreadsheets, slides, PDFs, and scanned images into clean, structured Markdown optimized for Large Language Models (LLMs) and vector search pipelines.
+**Local Markdown** is a standalone, 100% offline Windows desktop application designed to convert everyday office documents, spreadsheets, slides, PDFs, and scanned images into clean, structured Markdown optimized for Large Language Models (LLMs) and vector search pipelines.
+
+---
+
+### 📥 Download Local Markdown
+
+Get the latest production release from [GitHub Releases](https://github.com/farukEncoded/local-markdown/releases/latest):
+
+| Package | Direct Download | Type | Size |
+| :--- | :--- | :--- | :--- |
+| **Windows Installer** (Recommended) | [⬇️ **Download Setup (.exe)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.0/LocalMarkdown-Setup-1.0.0-x64.exe) | Setup Wizard | ~462 MB |
+| **Portable Package** | [⬇️ **Download Portable (.zip)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.0/LocalMarkdown-Portable-1.0.0-x64.zip) | Standalone Folder | ~678 MB |
+
+> **Windows SmartScreen Note**: Because this is an open-source project without a commercial code-signing certificate, Windows SmartScreen may show *"Windows protected your PC"* on first launch. Click **More info** → **Run anyway**.
 
 ---
 
@@ -20,7 +34,7 @@
 - **Intelligent LLM Normalization**: Automatically strips multi-megabyte Base64 image payloads and embedded binary blobs from output Markdown, replaces them with clean `![Image: Description]` placeholders, prepends lean document headers, and enforces standard UTF-8 LF formatting.
 - **Macro Safety**: Rejects macro-enabled documents (`.docm`, `.xlsm`, `.pptm`, or legacy files containing VBA macro streams) to protect non-technical users from execution hazards.
 - **Non-Destructive Guarantee**: Original files and user-saved exports are never modified, renamed, or deleted. History clearing safely removes only app-owned temporary scratch files and SQLite metadata.
-- **Zero Prerequisites**: Packaged with its own Python runtime, UI libraries, OCR engine, and headless document conversion runtimes. Recipients do not need Python, Office, or developer tools installed.
+- **Built-in Self-Updater**: Automatically checks for new updates on launch with seamless one-click in-place installation.
 
 ---
 
@@ -48,12 +62,8 @@ For full instructions, see the [Client Guide](docs/CLIENT-GUIDE.md).
 
 ## Releases & Downloads
 
-Pre-built binaries for Windows 10 & 11 (64-bit) are located in `dist_release/`:
-
-| Package | File | Size | Description |
-|---|---|---|---|
-| **Setup Installer** | `LocalMarkdown-Setup-1.0.0-x64.exe` | ~446 MB | Per-user Windows installer. Installs to `%LOCALAPPDATA%\Programs\LocalMarkdown` without admin prompts. |
-| **Portable Archive** | `LocalMarkdown-Portable-1.0.0-x64.zip` | ~711 MB | Standalone portable folder. Extract anywhere and launch `LocalMarkdown.exe`. |
+All official release builds and integrity checksums are hosted on GitHub:
+👉 **[View All Releases on GitHub](https://github.com/farukEncoded/local-markdown/releases)**
 
 ### SHA-256 Checksums
 ```text
