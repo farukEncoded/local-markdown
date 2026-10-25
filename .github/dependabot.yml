@@ -11,9 +11,3 @@ updates:
         patterns:
           - "markitdown*"
     open-pull-requests-limit: 5
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 3
