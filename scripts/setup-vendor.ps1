@@ -21,31 +21,43 @@ $tessExe = Join-Path $TesseractDir "tesseract.exe"
 $tessData = Join-Path $TesseractDir "tessdata\eng.traineddata"
 
 if ($Force -or -not (Test-Path $tessExe) -or -not (Test-Path $tessData)) {
-    Write-Host "`n[1/2] Staging Tesseract OCR 5.5.3 x64..." -ForegroundColor Yellow
+    Write-Host "`n[1/2] Staging Tesseract OCR..." -ForegroundColor Yellow
     New-Item -ItemType Directory -Force -Path $TempDownloads | Out-Null
     New-Item -ItemType Directory -Force -Path $TesseractDir | Out-Null
 
-    # Download Tesseract installer
-    $tessInstallerUrl = "https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-5.5.0.20241111.exe"
-    $tessInstallerPath = Join-Path $TempDownloads "tesseract-setup.exe"
-    
-    if (-not (Test-Path $tessInstallerPath)) {
-        Write-Host "Downloading Tesseract installer..." -ForegroundColor Gray
-        Invoke-WebRequest -Uri $tessInstallerUrl -OutFile $tessInstallerPath
+    $pfTess = Join-Path $env:ProgramFiles "Tesseract-OCR"
+    if (Test-Path (Join-Path $pfTess "tesseract.exe")) {
+        Write-Host "Found installed Tesseract OCR in Program Files, copying to vendor..." -ForegroundColor Gray
+        Copy-Item "$pfTess\*" $TesseractDir -Recurse -Force
+    } elseif (Get-Command choco -ErrorAction SilentlyContinue) {
+        Write-Host "Installing Tesseract via Chocolatey..." -ForegroundColor Gray
+        try {
+            choco install tesseract --no-progress -y
+            if (Test-Path (Join-Path $pfTess "tesseract.exe")) {
+                Copy-Item "$pfTess\*" $TesseractDir -Recurse -Force
+            }
+        } catch {
+            Write-Host "Chocolatey install failed: $_" -ForegroundColor Yellow
+        }
     }
-
-    # Extract using 7-Zip or installer silent extraction
-    Write-Host "Extracting Tesseract..." -ForegroundColor Gray
-    Start-Process $tessInstallerPath -ArgumentList "/S /D=$TesseractDir" -Wait
 
     # Verify English traineddata
     if (-not (Test-Path $tessData)) {
-        Write-Host "Downloading English traineddata..." -ForegroundColor Gray
-        $engUrl = "https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata"
-        New-Item -ItemType Directory -Force -Path (Join-Path $TesseractDir "tessdata") | Out-Null
-        Invoke-WebRequest -Uri $engUrl -OutFile $tessData
+        try {
+            Write-Host "Downloading English traineddata from GitHub..." -ForegroundColor Gray
+            $engUrl = "https://github.com/tesseract-ocr/tessdata_fast/raw/main/eng.traineddata"
+            New-Item -ItemType Directory -Force -Path (Join-Path $TesseractDir "tessdata") | Out-Null
+            Invoke-WebRequest -Uri $engUrl -OutFile $tessData
+        } catch {
+            Write-Host "Could not download traineddata: $_" -ForegroundColor Yellow
+        }
     }
-    Write-Host "[PASS] Tesseract OCR staged successfully." -ForegroundColor Green
+
+    if (Test-Path $tessExe) {
+        Write-Host "[PASS] Tesseract OCR staged successfully." -ForegroundColor Green
+    } else {
+        Write-Host "[WARN] Tesseract binary not staged. OCR tests will be skipped." -ForegroundColor Yellow
+    }
 } else {
     Write-Host "[1/2] Tesseract OCR already staged." -ForegroundColor Green
 }
@@ -54,39 +66,61 @@ if ($Force -or -not (Test-Path $tessExe) -or -not (Test-Path $tessData)) {
 $loSoffice = Join-Path $LibreOfficeDir "program\soffice.exe"
 
 if ($Force -or -not (Test-Path $loSoffice)) {
-    Write-Host "`n[2/2] Staging LibreOffice 26.8.1.1 Headless Runtime..." -ForegroundColor Yellow
+    Write-Host "`n[2/2] Staging LibreOffice Headless Runtime..." -ForegroundColor Yellow
     New-Item -ItemType Directory -Force -Path $TempDownloads | Out-Null
     
-    $loMsiUrl = "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi"
-    $loMsiPath = Join-Path $TempDownloads "LibreOffice_Win_x86-64.msi"
-    $extractDir = Join-Path $ProjectRoot "vendor_extracted_lo"
+    $pfLO = Join-Path $env:ProgramFiles "LibreOffice"
+    if (Test-Path (Join-Path $pfLO "program\soffice.exe")) {
+        Write-Host "Found installed LibreOffice in Program Files, copying to vendor..." -ForegroundColor Gray
+        New-Item -ItemType Directory -Force -Path $LibreOfficeDir | Out-Null
+        Copy-Item "$pfLO\program" $LibreOfficeDir -Recurse -Force
+        Copy-Item "$pfLO\share" $LibreOfficeDir -Recurse -Force
+    } elseif (Get-Command choco -ErrorAction SilentlyContinue) {
+        Write-Host "Installing LibreOffice via Chocolatey..." -ForegroundColor Gray
+        try {
+            choco install libreoffice-fresh --no-progress -y
+            if (Test-Path (Join-Path $pfLO "program\soffice.exe")) {
+                New-Item -ItemType Directory -Force -Path $LibreOfficeDir | Out-Null
+                Copy-Item "$pfLO\program" $LibreOfficeDir -Recurse -Force
+                Copy-Item "$pfLO\share" $LibreOfficeDir -Recurse -Force
+            }
+        } catch {
+            Write-Host "Chocolatey LibreOffice install failed: $_" -ForegroundColor Yellow
+        }
+    } else {
+        $loMsiUrl = "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi"
+        $loMsiPath = Join-Path $TempDownloads "LibreOffice_Win_x86-64.msi"
+        $extractDir = Join-Path $ProjectRoot "vendor_extracted_lo"
 
-    if (-not (Test-Path $loMsiPath)) {
-        Write-Host "Downloading LibreOffice MSI..." -ForegroundColor Gray
-        Invoke-WebRequest -Uri $loMsiUrl -OutFile $loMsiPath
+        try {
+            Write-Host "Downloading LibreOffice MSI..." -ForegroundColor Gray
+            Invoke-WebRequest -Uri $loMsiUrl -OutFile $loMsiPath
+            Write-Host "Extracting administrative MSI..." -ForegroundColor Gray
+            Start-Process msiexec.exe -ArgumentList "/a `"$loMsiPath`" /qb TARGETDIR=`"$extractDir`"" -Wait
+            New-Item -ItemType Directory -Force -Path $LibreOfficeDir | Out-Null
+            Move-Item (Join-Path $extractDir "program") $LibreOfficeDir -Force
+            Move-Item (Join-Path $extractDir "share") $LibreOfficeDir -Force
+        } catch {
+            Write-Host "LibreOffice download/extraction failed: $_" -ForegroundColor Yellow
+        } finally {
+            Remove-Item -Recurse -Force $extractDir -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force $TempDownloads -ErrorAction SilentlyContinue
+        }
     }
 
-    Write-Host "Extracting administrative MSI..." -ForegroundColor Gray
-    Start-Process msiexec.exe -ArgumentList "/a `"$loMsiPath`" /qb TARGETDIR=`"$extractDir`"" -Wait
+    # Prune non-English dictionaries to save 450 MB if present
+    $extDir = Join-Path $LibreOfficeDir "share\extensions"
+    if (Test-Path $extDir) {
+        Get-ChildItem -Path $extDir -Directory -Filter "dict-*" | 
+            Where-Object { $_.Name -ne "dict-en" } | 
+            Remove-Item -Recurse -Force
+    }
 
-    # Consolidate program and share folders
-    New-Item -ItemType Directory -Force -Path $LibreOfficeDir | Out-Null
-    Move-Item (Join-Path $extractDir "program") $LibreOfficeDir -Force
-    Move-Item (Join-Path $extractDir "share") $LibreOfficeDir -Force
-    Move-Item (Join-Path $extractDir "license.txt") $LibreOfficeDir -Force -ErrorAction SilentlyContinue
-    Move-Item (Join-Path $extractDir "NOTICE") $LibreOfficeDir -Force -ErrorAction SilentlyContinue
-
-    # Prune non-English dictionaries to save 450 MB
-    Write-Host "Pruning foreign language dictionaries..." -ForegroundColor Gray
-    Get-ChildItem -Path (Join-Path $LibreOfficeDir "share\extensions") -Directory -Filter "dict-*" | 
-        Where-Object { $_.Name -ne "dict-en" } | 
-        Remove-Item -Recurse -Force
-
-    # Clean up extraction temp
-    Remove-Item -Recurse -Force $extractDir -ErrorAction SilentlyContinue
-    Remove-Item -Recurse -Force $TempDownloads -ErrorAction SilentlyContinue
-
-    Write-Host "[PASS] LibreOffice Headless Runtime staged successfully." -ForegroundColor Green
+    if (Test-Path $loSoffice) {
+        Write-Host "[PASS] LibreOffice Headless Runtime staged successfully." -ForegroundColor Green
+    } else {
+        Write-Host "[WARN] LibreOffice not staged. Legacy Office tests will be skipped." -ForegroundColor Yellow
+    }
 } else {
     Write-Host "[2/2] LibreOffice Standalone Runtime already staged." -ForegroundColor Green
 }
