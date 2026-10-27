@@ -80,7 +80,7 @@ def perform_ocr_on_image(
     tess_exe = find_tesseract_binary()
     tessdata_dir = find_tessdata_dir()
 
-    if not tess_exe or not tessdata_dir:
+    if not tess_exe or not tess_exe.exists() or not tessdata_dir or not tessdata_dir.exists():
         return (
             "",
             ConversionWarning(
@@ -89,45 +89,55 @@ def perform_ocr_on_image(
             ),
         )
 
-    # Prepare image path and enforce pixel bounds
     cleanup_temp_image = False
-    if isinstance(image_input, Image.Image):
-        img = image_input
-        # Check pixel bounds
-        pixels = img.width * img.height
-        if pixels > MAX_PIXELS:
-            ratio = (MAX_PIXELS / pixels) ** 0.5
-            new_size = (int(img.width * ratio), int(img.height * ratio))
-            img = img.resize(new_size, Image.Resampling.LANCZOS)
+    img_path = None
 
-        img_path = temp_dir / "ocr_input.png"
-        img.save(img_path, format="PNG")
-        cleanup_temp_image = True
-    else:
-        img_path = Path(image_input).resolve()
-        # Check pixel bound of existing image file
-        with Image.open(img_path) as img:
+    try:
+        # Prepare image path and enforce pixel bounds
+        if isinstance(image_input, Image.Image):
+            img = image_input
+            # Check pixel bounds
             pixels = img.width * img.height
             if pixels > MAX_PIXELS:
                 ratio = (MAX_PIXELS / pixels) ** 0.5
                 new_size = (int(img.width * ratio), int(img.height * ratio))
-                resized = img.resize(new_size, Image.Resampling.LANCZOS)
-                img_path = temp_dir / "ocr_input_resized.png"
-                resized.save(img_path, format="PNG")
-                cleanup_temp_image = True
+                img = img.resize(new_size, Image.Resampling.LANCZOS)
 
-    out_base = (temp_dir / "ocr_output").resolve()
-    cmd = [
-        str(tess_exe),
-        str(img_path),
-        str(out_base),
-        "--tessdata-dir",
-        str(tessdata_dir),
-        "-l",
-        "eng",
-    ]
+            img_path = temp_dir / "ocr_input.png"
+            img.save(img_path, format="PNG")
+            cleanup_temp_image = True
+        else:
+            img_path = Path(image_input).resolve()
+            if not img_path.exists():
+                return (
+                    "",
+                    ConversionWarning(
+                        code="WARN_OCR_FAILED",
+                        user_message=f"OCR input image not found: {img_path.name}",
+                    ),
+                )
+            # Check pixel bound of existing image file
+            with Image.open(img_path) as img:
+                pixels = img.width * img.height
+                if pixels > MAX_PIXELS:
+                    ratio = (MAX_PIXELS / pixels) ** 0.5
+                    new_size = (int(img.width * ratio), int(img.height * ratio))
+                    resized = img.resize(new_size, Image.Resampling.LANCZOS)
+                    img_path = temp_dir / "ocr_input_resized.png"
+                    resized.save(img_path, format="PNG")
+                    cleanup_temp_image = True
 
-    try:
+        out_base = (temp_dir / "ocr_output").resolve()
+        cmd = [
+            str(tess_exe),
+            str(img_path),
+            str(out_base),
+            "--tessdata-dir",
+            str(tessdata_dir),
+            "-l",
+            "eng",
+        ]
+
         env = os.environ.copy()
         env["TESSDATA_PREFIX"] = str(tessdata_dir)
         # Add tesseract folder to PATH so DLLs can load
@@ -170,5 +180,5 @@ def perform_ocr_on_image(
             user_message=f"OCR processing error: {e}",
         )
     finally:
-        if cleanup_temp_image and img_path.exists():
+        if cleanup_temp_image and img_path and img_path.exists():
             img_path.unlink(missing_ok=True)

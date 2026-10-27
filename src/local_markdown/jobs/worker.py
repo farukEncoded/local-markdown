@@ -64,8 +64,29 @@ def run_worker_process(manifest_path_str: str) -> int:
         )
         staged_dir = job_dir / "staged"
         staged_dir.mkdir(exist_ok=True)
-        staged_copy = staged_dir / display_name
-        shutil.copy2(source_path, staged_copy)
+
+        from local_markdown.storage.exports import sanitize_filename
+        safe_name = sanitize_filename(display_name)
+        staged_copy = staged_dir / safe_name
+
+        # Copy with retry loop for Windows file locks (antivirus, background sync)
+        copied = False
+        last_copy_err = None
+        for attempt in range(4):
+            try:
+                shutil.copy2(source_path, staged_copy)
+                copied = True
+                break
+            except (OSError, PermissionError) as e:
+                last_copy_err = e
+                import time
+                time.sleep(0.05 * (attempt + 1))
+
+        if not copied:
+            raise ValidationError(
+                "E_FILE_ACCESS",
+                f"Could not read '{display_name}' ({last_copy_err}). If the file is open in another app or syncing, please close it and try again.",
+            )
 
         # Step 2: Conversion
         write_atomic_json(
@@ -100,11 +121,12 @@ def run_worker_process(manifest_path_str: str) -> int:
         return 0
 
     except FileNotFoundError as fnf:
+        missing_target = getattr(fnf, "filename", None) or str(fnf)
         err_result = ConversionResult(
             job_id=job_id,
             status=FileStatus.FAILED,
             error_code="E_FILE_NOT_FOUND",
-            error_message=f"File not found on disk. If opened from WhatsApp or OneDrive online-only, please save to local disk first.",
+            error_message=f"Missing file or system component ({missing_target}). If using OneDrive or a temporary folder, ensure the file is fully downloaded to local disk.",
         )
         write_atomic_json(result_file, err_result.to_dict())
         return 0
