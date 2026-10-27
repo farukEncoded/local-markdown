@@ -83,11 +83,15 @@ if ($LASTEXITCODE -ne 0) {
 # 5. Build Portable ZIP and Hashes
 Write-Host "`n[5/5] Building portable ZIP and computing release hashes..." -ForegroundColor Yellow
 & $PythonExe -c @"
-import zipfile, os
+import zipfile, os, re
 from pathlib import Path
 
+init_text = Path('src/local_markdown/__init__.py').read_text(encoding='utf-8')
+m = re.search(r'__version__\s*=\s*[\"\\\']([^\"\\\']+)[\"\\\']', init_text)
+ver = m.group(1) if m else '1.0.1'
+
 dist_dir = Path('dist/LocalMarkdown')
-zip_path = Path('dist_release/LocalMarkdown-Portable-1.0.0-x64.zip')
+zip_path = Path(f'dist_release/LocalMarkdown-Portable-{ver}-x64.zip')
 if zip_path.exists():
     zip_path.unlink()
 with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:

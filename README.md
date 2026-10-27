@@ -15,8 +15,8 @@ Get the latest production release from [GitHub Releases](https://github.com/faru
 
 | Package | Direct Download | Type | Size |
 | :--- | :--- | :--- | :--- |
-| **Windows Installer** (Recommended) | [⬇️ **Download Setup (.exe)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.0/LocalMarkdown-Setup-1.0.0-x64.exe) | Setup Wizard | ~462 MB |
-| **Portable Package** | [⬇️ **Download Portable (.zip)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.0/LocalMarkdown-Portable-1.0.0-x64.zip) | Standalone Folder | ~678 MB |
+| **Windows Installer** (Recommended) | [⬇️ **Download Setup (.exe)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.1/LocalMarkdown-Setup-1.0.1-x64.exe) | Setup Wizard | ~462 MB |
+| **Portable Package** | [⬇️ **Download Portable (.zip)**](https://github.com/farukEncoded/local-markdown/releases/download/v1.0.1/LocalMarkdown-Portable-1.0.1-x64.zip) | Standalone Folder | ~678 MB |
 
 > **Windows SmartScreen Note**: Because this is an open-source project without a commercial code-signing certificate, Windows SmartScreen may show *"Windows protected your PC"* on first launch. Click **More info** → **Run anyway**.
 

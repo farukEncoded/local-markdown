@@ -1,7 +1,7 @@
 {
   "app_name": "Local Markdown",
-  "app_version": "1.0.0",
-  "build_date": "2026-10-25",
+  "app_version": "1.0.1",
+  "build_date": "2026-10-27",
   "core_formats": [
     ".docx",
     ".pdf",

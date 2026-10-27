@@ -2,7 +2,7 @@
 ; Per-user non-elevated offline Windows installer
 
 #define MyAppName "Local Markdown"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Local Markdown"
 #define MyAppURL "https://github.com/local-markdown/local-markdown"
 #define MyAppExeName "LocalMarkdown.exe"
@@ -21,7 +21,7 @@ DisableProgramGroupPage=yes
 ; Per-user install without administrator prompt
 PrivilegesRequired=lowest
 OutputDir=..\dist_release
-OutputBaseFilename=LocalMarkdown-Setup-1.0.0-x64
+OutputBaseFilename=LocalMarkdown-Setup-1.0.1-x64
 SetupIconFile=..\src\local_markdown\resources\app.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/normal
