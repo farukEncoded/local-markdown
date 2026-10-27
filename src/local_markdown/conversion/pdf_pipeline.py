@@ -11,8 +11,8 @@ from local_markdown.conversion.models import ConversionWarning
 from local_markdown.conversion.ocr import perform_ocr_on_image, is_ocr_available
 from local_markdown.conversion.validation import ValidationError
 
-MAX_PDF_PAGES = 300
-MAX_OCR_PAGES = 50
+MAX_PDF_PAGES = 1000
+MAX_OCR_PAGES = 100
 SPARSE_TEXT_THRESHOLD = 30  # Alphanumeric chars per page to consider native text adequate
 TARGET_OCR_DPI = 250
 

@@ -51,7 +51,13 @@ def run_worker_process(manifest_path_str: str) -> int:
     markdown_file = job_dir / "result.md"
 
     try:
-        # Step 1: Staging - copy read-only source into private job folder
+        # Step 1: Staging - verify source exists and copy read-only source into private job folder
+        if not source_path.exists():
+            raise ValidationError(
+                "E_SOURCE_NOT_FOUND",
+                f"File '{display_name}' was not found. If dragged from WhatsApp/browser or OneDrive, please save it locally first.",
+            )
+
         write_atomic_json(
             progress_file,
             {"job_id": job_id, "step": "staging", "detail": "Preparing private workspace..."},
@@ -89,6 +95,16 @@ def run_worker_process(manifest_path_str: str) -> int:
             status=FileStatus.FAILED,
             error_code=ve.code,
             error_message=ve.user_message,
+        )
+        write_atomic_json(result_file, err_result.to_dict())
+        return 0
+
+    except FileNotFoundError as fnf:
+        err_result = ConversionResult(
+            job_id=job_id,
+            status=FileStatus.FAILED,
+            error_code="E_FILE_NOT_FOUND",
+            error_message=f"File not found on disk. If opened from WhatsApp or OneDrive online-only, please save to local disk first.",
         )
         write_atomic_json(result_file, err_result.to_dict())
         return 0
